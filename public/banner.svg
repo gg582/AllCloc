@@ -1,0 +1,14 @@
+
+<svg width="400" height="100" viewBox="0 0 400 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill: #1C1C1C; }
+    .border { stroke: #333333; }
+    .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-weight: 600; font-size: 20px; fill: #EBEBEB; }
+    .stat-value { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-weight: 700; font-size: 36px; fill: #A5FF24; }
+    .stat-label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-weight: 400; font-size: 14px; fill: #C4C4C4; }
+  </style>
+  <rect x="0.5" y="0.5" width="399" height="99" rx="10" class="bg" stroke-width="1"/>
+  <text x="20" y="35" class="title">Total Lines Contributed</text>
+  <text x="20" y="75" class="stat-value">64,033</text>
+  <text x="20" y="85" class="stat-label">lines in 36 public repos</text>
+</svg>
