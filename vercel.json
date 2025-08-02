@@ -1,7 +1,4 @@
 {
-  "outputDirectory": "public",
-  "rewrites": [
-    { "source": "/lines.json", "destination": "/lines.json" }
-  ]
+  "public": "public"
 }
 

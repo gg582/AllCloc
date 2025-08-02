@@ -1,32 +1,33 @@
-name: Count Lines and Trigger Deploy
+name: Line Count
 
 on:
   push:
     branches: [main]
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
 
 jobs:
   count-lines:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Count lines of code
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Git
+        run: sudo apt-get update && sudo apt-get install git -y
+
+      - name: Run line count script
         run: |
           mkdir -p public
-          total=0
-          for repo in $(gh repo list gg582 --limit 1000 --json name,isPrivate --jq '.[] | select(.isPrivate == false) | .name'); do
-            echo "Cloning $repo..."
-            gh repo clone gg582/$repo temp_repo -- --depth=1
-            count=$(find temp_repo -type f \( -name '*.c' -o -name '*.cpp' -o -name '*.py' -o -name '*.java' -o -name '*.sh' \) -exec cat {} + | wc -l)
-            echo "$repo: $count lines"
-            total=$((total + count))
-            rm -rf temp_repo
-          done
-          echo "{\"total_lines\": $total}" > public/lines.json
+          python scripts/count_lines.py
 
-      - name: Trigger Vercel Deploy Hook
-        run: curl -X POST "${{ secrets.VERCEL_HOOK_URL }}"
+      - name: Trigger Vercel deploy
+        env:
+          HOOK_URL: ${{ secrets.VERCEL_HOOK_URL }}
+        run: curl -X POST "$HOOK_URL"
+
