@@ -1,0 +1,6 @@
+{
+  "public": "api",
+  "rewrites": [
+    { "source": "/api/lines.json", "destination": "/api/lines.json" }
+  ]
+}

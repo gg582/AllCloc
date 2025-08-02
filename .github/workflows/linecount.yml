@@ -1,0 +1,44 @@
+name: Count Lines and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 0'  # 매주 일요일 자정
+
+jobs:
+  count-lines:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Clone All Repositories
+      run: |
+        mkdir repos && cd repos
+        gh repo list gg582 --limit 1000 --json nameWithOwner -q '.[].nameWithOwner' | \
+        xargs -n1 gh repo clone
+      env:
+        GH_TOKEN: ${{ secrets.PAT_1 }}
+
+    - name: Count Lines by gg582
+      run: |
+        cd repos
+        total=0
+        for d in */ ; do
+          cd "$d"
+          count=$(git log --author="gg582" --pretty=tformat: --numstat | awk '{add += $1} END {print add}')
+          total=$((total + count))
+          cd ..
+        done
+        echo "Total lines: $total"
+        mkdir -p ../api
+        echo '{"schemaVersion":1,"label":"Lines","message":"'$total'","color":"blue"}' > ../api/lines.json
+
+    - name: Commit and Push lines.json
+      run: |
+        git config user.name "gg582"
+        git config user.email "gg582@daum.net"
+        git add api/lines.json
+        git commit -m "Update lines.json" || echo "No changes to commit"
+        git push
