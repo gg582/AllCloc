@@ -1,33 +1,51 @@
-name: Calculate Lines and Deploy
+name: Public Repo Line Counter
 
 on:
   schedule:
-    - cron: '0 0 * * *'  
-  workflow_dispatch:     
+    - cron: '0 0 * * *' 
+  workflow_dispatch:    
 
 jobs:
   count-lines:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout empty workspace
+        uses: actions/checkout@v3
 
-      - name: Calculate total lines of code
-        id: count
+      - name: Set up GitHub CLI
+        uses: cli/gh-action@v2
+        with:
+          github-token: ${{ secrets.PAT_1 }}
+
+      - name: Clone all public repos of gg582
         run: |
-          total=$(git ls-files '*.c' '*.cpp' '*.py' '*.go' '*.js' '*.ts' '*.java' '*.cs' '*.rb' | xargs cat | wc -l)
+          mkdir repos
+          cd repos
+          gh repo list gg582 --limit 1000 --source --json name,url,visibility \
+            | jq -r '.[] | select(.visibility == "public") | .url' \
+            | while read repo_url; do
+                gh repo clone "$repo_url" -- --depth=1
+              done
+
+      - name: Count lines of code in all repos
+        run: |
+          cd repos
+          total=0
+          for dir in */ ; do
+            cd "$dir"
+            count=$(find . -type f \( -name "*.c" -o -name "*.cpp" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.ts" -o -name "*.java" -o -name "*.cs" -o -name "*.rb" \) -exec cat {} + | wc -l)
+            total=$((total + count))
+            cd ..
+          done
           echo "Total lines: $total"
-          echo "::set-output name=total::$total"
-
-      - name: Create JSON badge file
-        run: |
-          echo "{\"schemaVersion\":1,\"label\":\"Lines\",\"message\":\"${{ steps.count.outputs.total }}\",\"color\":\"blue\"}" > public/lines.json
+          echo "{\"schemaVersion\":1,\"label\":\"Lines\",\"message\":\"$total\",\"color\":\"blue\"}" > ../public/lines.json
 
       - name: Commit and push JSON file
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add public/lines.json
-          git commit -m "Update total lines count badge"
+          git commit -m "Update public repo line count"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
