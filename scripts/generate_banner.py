@@ -16,7 +16,7 @@ SVG_TEMPLATE = """
   <rect x="0.5" y="0.5" width="399" height="99" rx="10" class="bg" stroke-width="1"/>
   <text x="20" y="35" class="title">Total Lines Contributed</text>
   <text x="20" y="75" class="stat-value">{total_lines}</text>
-  <text x="20" y="85" class="stat-label">lines in {repo_count} public repos</text>
+  <text x="20" y="95" class="stat-label">lines in {repo_count} public repos</text>
 </svg>
 """
 
