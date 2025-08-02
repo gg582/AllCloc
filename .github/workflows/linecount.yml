@@ -1,52 +1,32 @@
-name: Public Repo Line Counter
+name: Count Lines and Trigger Deploy
 
 on:
+  push:
+    branches: [main]
   schedule:
-    - cron: '0 0 * * *' 
-  workflow_dispatch:    
+    - cron: '0 0 * * *'
 
 jobs:
   count-lines:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout empty workspace
-        uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Set up GitHub CLI
-        uses: cli/gh-action@v2
-        with:
-          github-token: ${{ secrets.PAT_1 }}
-
-      - name: Clone all public repos of gg582
+      - name: Count lines of code
         run: |
-          mkdir repos
-          cd repos
-          gh repo list gg582 --limit 1000 --source --json name,url,visibility \
-            | jq -r '.[] | select(.visibility == "public") | .url' \
-            | while read repo_url; do
-                gh repo clone "$repo_url" -- --depth=1
-              done
-
-      - name: Count lines of code in all repos
-        run: |
-          cd repos
+          mkdir -p public
           total=0
-          for dir in */ ; do
-            cd "$dir"
-            count=$(find . -type f \( -name "*.c" -o -name "*.cpp" -o -name "*.py" -o -name "*.go" -o -name "*.js" -o -name "*.ts" -o -name "*.java" -o -name "*.cs" -o -name "*.rb" \) -exec cat {} + | wc -l)
+          for repo in $(gh repo list gg582 --limit 1000 --json name,isPrivate --jq '.[] | select(.isPrivate == false) | .name'); do
+            echo "Cloning $repo..."
+            gh repo clone gg582/$repo temp_repo -- --depth=1
+            count=$(find temp_repo -type f \( -name '*.c' -o -name '*.cpp' -o -name '*.py' -o -name '*.java' -o -name '*.sh' \) -exec cat {} + | wc -l)
+            echo "$repo: $count lines"
             total=$((total + count))
-            cd ..
+            rm -rf temp_repo
           done
-          echo "Total lines: $total"
-          echo "{\"schemaVersion\":1,\"label\":\"Lines\",\"message\":\"$total\",\"color\":\"blue\"}" > ../public/lines.json
+          echo "{\"total_lines\": $total}" > public/lines.json
 
-      - name: Commit and push JSON file
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add public/lines.json
-          git commit -m "Update public repo line count"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      - name: Trigger Vercel Deploy Hook
+        run: curl -X POST "${{ secrets.VERCEL_HOOK_URL }}"
