@@ -12,7 +12,7 @@ import time
 FILTERED_AUTHORS = ['yunjin', 'yoonjin', 'gg582']
 
 # Repositories to be excluded from the analysis
-EXCLUDED_REPOS = ['CSharp-Arkanoid-based-Project', 'gg582.github.io', 'tk9.0', 'SampleBlog', 'RIOTOSMiniCarImplementation', 'exampleCodeFromAzureClass']
+EXCLUDED_REPOS = ['CSharp-Arkanoid-based-Project', 'gg582.github.io', 'tk9.0', 'SampleBlog', 'RIOTOSMiniCarImplementation', 'exampleCodeFromAzureClass', 'anichili-public']
 
 # GitHub organization/username
 GITHUB_USERNAME = 'gg582'
