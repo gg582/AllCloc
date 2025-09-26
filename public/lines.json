@@ -1,14 +1,16 @@
 {
+  "AllCloc": 267,
+  "airi-memory-docker": 144,
+  "yoonzip": 455,
   "my-awesome-linux-configs": 697,
   "laputil": 1120,
-  "gg582": 0,
-  "incuspeed": 0,
+  "gg582": 144,
+  "incuspeed": 3678,
   "RADIX_SIMPLE": 144,
-  "linux_virt_unit": 0,
-  "raspberry_pi_raspbot": 0,
+  "linux_virt_unit": 2419,
+  "raspberry_pi_raspbot": 31311,
   "gobus": 834,
   "anichili-automation-bots": 541,
-  "AllCloc": 265,
   "dnf-tk": 133,
   "OReillySpringPractice": 626,
   "chi-blog": 3671,
@@ -28,7 +30,6 @@
   "bronze_archaeology": 1037,
   "CryptographyBasicLecture": 645,
   "traverse_visualization_bmp": 244,
-  "yoonzip": 455,
   "dnfbind": 265,
   "M1-aarch64-fedora-Zoom": 41,
   "linear_algebra_lecture": 763,
@@ -42,5 +43,5 @@
   "FFMPEG_Good_Scripts": 25,
   "dionysus-music-player": 675,
   "miney": 1317,
-  "total_lines": 61835
+  "total_lines": 99533
 }
