@@ -9,7 +9,7 @@ import time
 
 # Configuration: filtered authors and excluded repositories
 # The script will look for authors whose names contain any of these strings
-FILTERED_AUTHORS = ['yunjin', 'yoonjin', 'gg582']
+FILTERED_AUTHORS = ['yunjin', 'yoonjin', 'gg582', 'Yunjin', 'Lee', 'hobbycoder']
 
 # Repositories to be excluded from the analysis
 EXCLUDED_REPOS = ['CSharp-Arkanoid-based-Project', 'gg582.github.io', 'tk9.0', 'SampleBlog', 'RIOTOSMiniCarImplementation', 'exampleCodeFromAzureClass', 'anichili-public']
