@@ -42,7 +42,7 @@ def get_public_repos():
             [
                 'gh', 'repo', 'list', GITHUB_USERNAME,
                 '--limit', '1000', '--json', 'name,isPrivate,isFork',
-                '--jq', '.[] | select(.isPrivate == false and (.isFork == false or .name == "gobus")) | .name'
+                '--jq', '.[] | select(.isPrivate == false and (.isFork == false or .name == "gobus" or .name == "ssh-chatter")) | .name'
             ],
             capture_output=True, text=True, check=True
         )
