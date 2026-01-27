@@ -9,6 +9,6 @@
   </style>
   <rect x="0.5" y="0.5" width="399" height="99" rx="10" class="bg" stroke-width="1"/>
   <text x="20" y="35" class="title">Total Lines Contributed</text>
-  <text x="20" y="75" class="stat-value">282,675</text>
-  <text x="20" y="95" class="stat-label">lines in 72 public repos</text>
+  <text x="20" y="75" class="stat-value">286,572</text>
+  <text x="20" y="95" class="stat-label">lines in 74 public repos</text>
 </svg>
